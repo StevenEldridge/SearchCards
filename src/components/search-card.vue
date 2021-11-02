@@ -9,12 +9,28 @@
 <script>
 module.exports = {
   name: 'searchCard',
+  props: {  // TODO add props to cards HTML
+    title: {
+      type: String,
+      required: true
+    },
+    link: {
+      type: String,
+      required: true
+    },
+    displayLink: {
+      type: String,
+      required: false,
+      default: this.link
+    },
+    description: {
+      type: String,
+      required: false,
+      default: ''
+    }
+  },
   data: function() {
     return {
-      title: "This will be the title",
-      link: "https://www.google.com",
-      description: "This will be the description of the web search. " +
-          "This should take the rest of the cards space and should wrap properly once the CSS is set up.",
       widthPercent: 20
     }
   }

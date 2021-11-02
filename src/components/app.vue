@@ -1,15 +1,14 @@
 <template>
   <div>
-    <search-bar class="searchBar" :windowWidth="windowWidth"/>
-    <div class="cards">
-      <search-card></search-card>
-      <search-card></search-card>
-      <search-card></search-card>
-      <search-card></search-card>
-      <search-card></search-card>
-      <search-card></search-card>
-      <search-card></search-card>
-      <search-card></search-card>
+    <search-bar class="searchBar" :windowWidth="windowWidth" @get-search-results="getSearchResults"/>
+    <div class="cards" v-if="searchResults">
+      <search-card v-for="item in searchResults.items"
+                   :key="item.link"
+                   :title="item.title"
+                   :link="item.link"
+                   :displayLink="item.displayLink"
+                   :description="item.snippet"
+      ></search-card>
     </div>
 
   </div>
@@ -27,9 +26,20 @@ export default {
   },
   data: function() {
     return {
+      searchResults: null,
       windowWidth: window.innerWidth
     }
 
+  },
+  methods: {
+    getSearchResults(searchResults) {
+      this.searchResults = searchResults
+    }
+  },
+  watch: {
+    searchJSON: function() {
+      console.log("searchJSON has been changed!")
+    }
   },
   mounted() {
     window.onresize = () => {

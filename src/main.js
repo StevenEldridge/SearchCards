@@ -6,7 +6,7 @@ Vue.config.productionTip = false
 new Vue({
   render: h => h(app),
   data: {
-    windowWidth: window.innerWidth
+
   }
 }).$mount('#app')
 
