@@ -1,7 +1,7 @@
 <template>
   <div class="searchCard">
     <h2>{{ title }}</h2>
-    <h3>{{ link }}</h3>
+    <h3>{{ displayLink }}</h3>
     <p>{{ description }}</p>
   </div>
 </template>

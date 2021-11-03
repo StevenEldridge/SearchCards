@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search-bar class="searchBar" :windowWidth="windowWidth" @get-search-results="getSearchResults"/>
+    <search-bar class="searchBar" :style="{'margin-top': searchBarTopMargin + 'px'}" :windowWidth="windowWidth" @get-search-results="getSearchResults"/>
     <div class="cards" v-if="searchResults">
       <search-card v-for="item in searchResults.items"
                    :key="item.link"
@@ -24,10 +24,11 @@ export default {
     searchBar,
     searchCard
   },
-  data: function() {
+  data: function () {
     return {
       searchResults: null,
-      windowWidth: window.innerWidth
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight
     }
 
   },
@@ -36,14 +37,21 @@ export default {
       this.searchResults = searchResults
     }
   },
-  watch: {
-    searchJSON: function() {
-      console.log("searchJSON has been changed!")
+  computed: {
+    searchBarTopMargin() {
+      if (this.searchResults !== null) {
+        console.log("NULLLLLLL")
+        return 0
+      } else {
+        console.log("NOT NULLL")
+        return 0.3 * this.windowHeight
+      }
     }
   },
   mounted() {
     window.onresize = () => {
       this.windowWidth = window.innerWidth
+      this.windowHeight = window.innerHeight
     }
   }
 }
@@ -53,6 +61,7 @@ export default {
   .searchBar {
     width: 100%;
     vertical-align: center;
+    transition-duration: 0.5s;
   }
 
   .cards {

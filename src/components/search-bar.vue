@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  export default {
+export default {
     name: 'searchBar',
     props: {
       windowWidth: {  // TODO add dynamic scaling to the search cards
@@ -48,6 +48,7 @@
           fetch('https://www.googleapis.com/customsearch/v1?key=' + this.apiKey + '&cx=' + this.searchID + '&q=' + this.search)
               .then(response => response.json())
               .then(data => (this.$emit('get-search-results', data)))
+              .catch((error) => this.errorMessage = error)
         }
       },
       formValidation() {
