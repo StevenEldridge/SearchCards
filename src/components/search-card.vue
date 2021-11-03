@@ -1,5 +1,5 @@
 <template>
-  <div class="searchCard">
+  <div class="searchCard" @click="openModal">
     <h2>{{ title }}</h2>
     <h3>{{ displayLink }}</h3>
     <p>{{ description }}</p>
@@ -33,12 +33,18 @@ module.exports = {
     return {
       widthPercent: 20
     }
+  },
+  methods: {
+    openModal() {
+      this.$emit('open-modal', this.title, this.link)
+    }
   }
 }
 </script>
 
 <style scoped>
   .searchCard {
+    cursor: pointer;
     border: 3px solid;
     border-radius: 20px;
     margin: 10px;

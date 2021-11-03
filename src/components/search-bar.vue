@@ -2,10 +2,10 @@
   <div class="searchBarBackground">
     <div id ="searchBar" class="searchBar" :style="{'margin-left': searchInputMarginLeft.toString() + 'px'}">
       <h2>Search: <span style="color: red" v-if="errorMessage">{{ errorMessage }}</span></h2>
-      <input v-model="search" class="searchInput" :style="{
-      width: searchInputWidth.toString() + 'px',
-      'padding-left': searchInputPadding.toString() + 'px',
-      'padding-right': searchInputPadding.toString() + 'px'}">
+      <input v-model="search" class="searchInput" @keyup.enter="getSearch" autofocus :style="{
+            width: searchInputWidth.toString() + 'px',
+            'padding-left': searchInputPadding.toString() + 'px',
+            'padding-right': searchInputPadding.toString() + 'px'}">
       <button class="buttons" @click="getSearch()">Search</button>
     </div>
   </div>
@@ -48,7 +48,6 @@ export default {
           fetch('https://www.googleapis.com/customsearch/v1?key=' + this.apiKey + '&cx=' + this.searchID + '&q=' + this.search)
               .then(response => response.json())
               .then(data => (this.$emit('get-search-results', data)))
-              .catch((error) => this.errorMessage = error)
         }
       },
       formValidation() {
