@@ -40,9 +40,15 @@ export default {
     }
   },
   methods: {
+    // Input: None
+    // Returns: None
+    // Description: Opens the website URL in a new browser tab
     openLink() {
       window.open(this.link)
     },
+    // Input: None
+    // Returns: None
+    // Description: Sends a close modal request to the app parent
     closeModal() {
       this.$emit('close-modal')
     }

@@ -15,7 +15,7 @@
 export default {
     name: 'searchBar',
     props: {
-      windowWidth: {  // TODO add dynamic scaling to the search cards
+      windowWidth: {
         type: Number,
         required: false,
         default: window.innerWidth
@@ -42,6 +42,9 @@ export default {
       }
     },
     methods: {
+      // Input: None
+      // Returns: An object that contains results of a google API call
+      // Description: Calls the Google search engine API
       getSearch() {
         if(this.formValidation()) {
           this.errorMessage = ''
@@ -50,9 +53,16 @@ export default {
               .then(data => (this.$emit('get-search-results', data)))
         }
       },
+      // Input: None
+      // Returns: True or False
+      // Description: Ensures that all user input forms are valid
       formValidation() {
-        if(this.search.length > 2048) {
+        if (this.search.length > 2048) {
           this.errorMessage = 'Your search is too long'
+          return false
+        }
+        else if (this.search.length === 0) {
+          this.errorMessage = 'You must enter something to search'
           return false
         }
         else {

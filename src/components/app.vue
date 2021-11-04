@@ -12,6 +12,8 @@
              :link="item.link"
              :displayLink="item.displayLink"
              :description="item.snippet"
+             :imageURL="proccessImageURL(item)"
+             :windowWidth="windowWidth"
       ></search-card>
     </div>
     <search-card-modal class="modal"
@@ -48,16 +50,42 @@ export default {
 
   },
   methods: {
+    // Input: An object containing search result data
+    // Returns: None
+    // Description: Receives search results from search-bar child component
     getSearchResults(searchResults) {
       this.searchResults = searchResults
     },
+    // Input: Two strings containing information for the modal
+    // Returns: None
+    // Description: Receives data from search-card child and opens a modal dialog
     openModal(title, link) {
       this.modalTitle = title
       this.modalLink = link
       this.showModal = true
     },
+    // Input: None
+    // Returns: None
+    // Description: Receives a request from search-card-modal to close the modal dialog
     closeModal() {
       this.showModal = false
+    },
+    // Input: An object of the google search results
+    // Returns: Either null or a URL String
+    // Description: Checks to ensure there is a URL present and catches uninitialized
+    //              variables that results if there is no image url given
+    proccessImageURL(item) {
+      try {
+        if (item.pagemap.cse_image[0].src !== undefined) {
+          return item.pagemap.cse_image[0].src
+        }
+        else {
+          return null
+        }
+      }
+      catch {
+        return null
+      }
     }
   },
   computed: {
@@ -92,6 +120,7 @@ export default {
   .cards {
     display: flex;
     flex-wrap: wrap;
+    width: 100%;
   }
 
   .modal {
