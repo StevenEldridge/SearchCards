@@ -1,12 +1,18 @@
 <template>
   <div class="app">
+    <button style="position: relative; top: 20px; font-size: 1.6em"
+          :style="{left: (windowWidth - 160) + 'px'}"
+          @click="openSettingsModal"
+    >
+      Settings
+    </button>
     <search-bar class="searchBar"
           :style="{'margin-top': searchBarTopMargin + 'px'}"
           :windowWidth="windowWidth"
           @get-search-results="getSearchResults"/>
     <div class="cards" v-if="searchResults">
       <search-card v-for="item in searchResults.items"
-             @open-modal="openModal"
+             @open-modal="openCardModal"
              :key="item.link"
              :title="item.title"
              :link="item.link"
@@ -17,12 +23,17 @@
       ></search-card>
     </div>
     <search-card-modal class="modal"
-           v-show="showModal"
+           v-show="showCardModal"
            :title="modalTitle"
            :link="modalLink"
            :window-height="windowHeight"
-           @close-modal="closeModal"
+           @close-modal="closeCardModal"
     ></search-card-modal>
+    <settings-modal class="modal"
+           v-show="showSettingsModal"
+           :window-height="windowHeight"
+           @close-modal="closeSettingsModal"
+    ></settings-modal>
   </div>
 </template>
 
@@ -30,20 +41,23 @@
 import searchBar from './search-bar.vue'
 import searchCard from './search-card.vue'
 import searchCardModal from './search-card-modal.vue'
+import settingsModal from './settings-modal.vue'
 
 export default {
   name: "app",
   components: {
     searchBar,
     searchCard,
-    searchCardModal
+    searchCardModal,
+    settingsModal
   },
   data: function () {
     return {
       searchResults: null,
       modalTitle: '',
       modalLink: '',
-      showModal: false,
+      showCardModal: false,
+      showSettingsModal: false,
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight
     }
@@ -58,17 +72,29 @@ export default {
     },
     // Input: Two strings containing information for the modal
     // Returns: None
-    // Description: Receives data from search-card child and opens a modal dialog
-    openModal(title, link) {
+    // Description: Receives data from search-card child and opens a search card modal dialog
+    openCardModal(title, link) {
       this.modalTitle = title
       this.modalLink = link
-      this.showModal = true
+      this.showCardModal = true
     },
     // Input: None
     // Returns: None
     // Description: Receives a request from search-card-modal to close the modal dialog
-    closeModal() {
-      this.showModal = false
+    closeCardModal() {
+      this.showCardModal = false
+    },
+    // Input: None
+    // Returns: None
+    // Description: Opens the settings modal dialog
+    openSettingsModal() {
+      this.showSettingsModal = true
+    },
+    // Input:
+    // Returns:
+    // Description:
+    closeSettingsModal() {
+      this.showSettingsModal = false
     },
     // Input: An object of the google search results
     // Returns: Either null or a URL String
@@ -130,5 +156,22 @@ export default {
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.7);
+  }
+
+  button {
+    border: none;
+    color: white;
+    padding: 0.2em 0.5em;
+    font-size: 1.4em;
+    cursor: pointer;
+    outline: none;
+    background: #3F3F3F;
+    border-radius: 5px;
+    transition-duration: 0.3s;
+  }
+
+  button:hover {
+    transition-duration: 0.3s;
+    background-color: green;
   }
 </style>
