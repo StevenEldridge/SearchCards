@@ -6,7 +6,7 @@
             width: searchInputWidth.toString() + 'px',
             'padding-left': searchInputPadding.toString() + 'px',
             'padding-right': searchInputPadding.toString() + 'px'}">
-      <button class="buttons" @click="getSearch()">Search</button>
+      <button class="buttons" :style="buttonColors" @click="getSearch()">Search</button>
     </div>
   </div>
 </template>
@@ -19,6 +19,10 @@ export default {
         type: Number,
         required: false,
         default: window.innerWidth
+      },
+      colors: {
+        type: Object,
+        required: true
       }
     },
     data: function() {
@@ -39,6 +43,12 @@ export default {
       },
       searchInputMarginLeft() {
         return (this.windowWidth - this.searchInputWidth - this.searchInputPadding * 3) / 2
+      },
+      buttonColors() {
+        return {
+          '--background': this.colors.backgroundDark,
+          '--backgroundHover': this.colors.colorDark,
+        }
       }
     },
     methods: {
@@ -81,7 +91,6 @@ export default {
   .searchBarBackground {
     padding-top: 10px;
     padding-bottom: 40px;
-    background: white;
   }
 
   .searchBar {
@@ -101,15 +110,15 @@ export default {
     color: white;
     padding: 0.2em 0.5em;
     font-size: 1.4em;
+    background: var(--background);
     cursor: pointer;
     outline: none;
-    background: #3F3F3F;
     border-radius: 5px;
     transition-duration: 0.3s;
   }
 
   button:hover {
     transition-duration: 0.3s;
-    background-color: green;
+    background: var(--backgroundHover);
   }
 </style>

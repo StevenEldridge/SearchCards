@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div class="modalContent" :style="{'margin-top': modalMarginHeight + 'px'}">
-      <div class="modalHeading">
+    <div class="modalContent" :style="{'margin-top': modalMarginHeight + 'px', 'border-color': colors.colorDark}">
+      <div class="modalHeading" :style="{'background': colors.colorLight}">
         <div class="headingLeft">
           <h2>{{ title }}</h2>
           <h4>{{ link }}</h4>
         </div>
         <div class="headingRight">
-          <button @click="closeModal">Close</button>
-          <button @click="openLink">Open Link</button>
+          <button @click="closeModal" :style="buttonColors">Close</button>
+          <button @click="openLink" :style="buttonColors">Open Link</button>
         </div>
       </div>
       <iframe :src="link" :title="title"></iframe>
@@ -32,11 +32,21 @@ export default {
       type: Number,
       required: false,
       default: window.innerHeight
+    },
+    colors: {
+      type: Object,
+      required: true
     }
   },
   computed: {
     modalMarginHeight() {
       return 0.05 * this.windowHeight
+    },
+    buttonColors() {
+      return {
+        '--background': this.colors.backgroundDark,
+        '--backgroundHover': this.colors.colorDark,
+      }
     }
   },
   methods: {
@@ -62,14 +72,13 @@ export default {
     margin-left: auto;
     margin-right: auto;
     background-color: #fefefe;
-    border: 5px solid darkgreen;
+    border: 5px solid;
     border-radius: 30px;
     width: 90%;
     height: 90%;
   }
 
   .modalHeading {
-    background: lightgreen;
     font-size: 1.4em;
     border-top-left-radius: 25px;
     border-top-right-radius: 25px;
@@ -103,14 +112,14 @@ export default {
     padding: 0.25em 0;
     cursor: pointer;
     outline: none;
-    background: #3F3F3F;
+    background: var(--background);
     border-radius: 5px;
     transition-duration: 0.3s;
   }
 
   button:hover {
     transition-duration: 0.3s;
-    background-color: green;
+    background-color: var(--backgroundHover);
   }
 
   iframe {

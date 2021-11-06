@@ -1,7 +1,7 @@
 <template>
-  <div class="app">
+  <div class="app" :style="{'color': colors.fontColor}">
     <button style="position: relative; top: 20px; font-size: 1.6em"
-          :style="{left: (windowWidth - 160) + 'px'}"
+          :style="buttonColors"
           @click="openSettingsModal"
     >
       Settings
@@ -9,6 +9,7 @@
     <search-bar class="searchBar"
           :style="{'margin-top': searchBarTopMargin + 'px'}"
           :windowWidth="windowWidth"
+          :colors="colors"
           @get-search-results="getSearchResults"/>
     <div class="cards" v-if="searchResults">
       <search-card v-for="item in searchResults.items"
@@ -19,6 +20,7 @@
              :displayLink="item.displayLink"
              :description="item.snippet"
              :imageURL="proccessImageURL(item)"
+             :colors="colors"
              :windowWidth="windowWidth"
       ></search-card>
     </div>
@@ -27,12 +29,14 @@
            :title="modalTitle"
            :link="modalLink"
            :window-height="windowHeight"
+           :colors="colors"
            @close-modal="closeCardModal"
     ></search-card-modal>
     <settings-modal class="modal"
            v-show="showSettingsModal"
            :window-height="windowHeight"
            @close-modal="closeSettingsModal"
+           @update-color-theme="updateColorTheme"
     ></settings-modal>
   </div>
 </template>
@@ -59,9 +63,9 @@ export default {
       showCardModal: false,
       showSettingsModal: false,
       windowWidth: window.innerWidth,
-      windowHeight: window.innerHeight
+      windowHeight: window.innerHeight,
+      colors: null
     }
-
   },
   methods: {
     // Input: An object containing search result data
@@ -100,6 +104,9 @@ export default {
     // Returns: Either null or a URL String
     // Description: Checks to ensure there is a URL present and catches uninitialized
     //              variables that results if there is no image url given
+    updateColorTheme(colors) {
+      this.colors = colors
+    },
     proccessImageURL(item) {
       try {
         if (item.pagemap.cse_image[0].src !== undefined) {
@@ -121,6 +128,22 @@ export default {
       } else {
         return 0.3 * this.windowHeight
       }
+    },
+    buttonColors() {
+      return {
+        left: (this.windowWidth - 160) + 'px',
+        '--background': this.colors.backgroundDark,
+        '--backgroundHover': this.colors.colorDark,
+      }
+    }
+  },
+  beforeMount() {
+    this.colors = new function() {
+      this.fontColor = 'black'
+      this.backgroundLight = 'white'
+      this.backgroundDark = '#3F3F3F'
+      this.colorLight = 'lightgreen'
+      this.colorDark = 'darkgreen'
     }
   },
   mounted() {
@@ -165,13 +188,13 @@ export default {
     font-size: 1.4em;
     cursor: pointer;
     outline: none;
-    background: #3F3F3F;
+    background: var(--background);
     border-radius: 5px;
     transition-duration: 0.3s;
   }
 
   button:hover {
     transition-duration: 0.3s;
-    background-color: green;
+    background: var(--backgroundHover);
   }
 </style>

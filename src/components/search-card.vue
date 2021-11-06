@@ -1,6 +1,6 @@
 <template>
-  <div class="searchCard" :style="{width: widthPercent}" @click="openModal">
-    <div class="title">
+  <div class="searchCard" :style="{width: widthPercent, 'border-color': colors.colorDark}" @click="openModal">
+    <div class="title" :style="{'background': colors.colorLight}">
       <h2>{{ title }}</h2>
     </div>
     <img v-if="imageURL" :src="imageURL">
@@ -41,6 +41,10 @@ module.exports = {
       type: Number,
       required: false,
       default: window.innerWidth
+    },
+    colors: {
+      type: Object,
+      required: true
     }
   },
   computed: {
@@ -94,7 +98,6 @@ module.exports = {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: lightgreen;
     border-top-left-radius: 17px;
     border-top-right-radius: 17px;
   }
