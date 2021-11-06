@@ -9,6 +9,8 @@
     <search-bar class="searchBar"
           :style="{'margin-top': searchBarTopMargin + 'px'}"
           :windowWidth="windowWidth"
+          :dateRestrict="dateRestrict"
+          :safeSearch="safeSearch"
           :colors="colors"
           @get-search-results="getSearchResults"/>
     <div class="cards" v-if="searchResults">
@@ -64,7 +66,9 @@ export default {
       showSettingsModal: false,
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight,
-      colors: null
+      colors: null,
+      dateRestrict: '0',
+      safeSearch: 'off'
     }
   },
   methods: {
@@ -97,7 +101,9 @@ export default {
     // Input:
     // Returns:
     // Description:
-    closeSettingsModal() {
+    closeSettingsModal(dateRestrict, safeSearch) {
+      this.dateRestrict = dateRestrict
+      this.safeSearch = safeSearch
       this.showSettingsModal = false
     },
     // Input: An object of the google search results

@@ -20,6 +20,16 @@ export default {
         required: false,
         default: window.innerWidth
       },
+      dateRestrict: {  // Only shows search results that are newer than this many days. 0 disables restriction
+        type: String,
+        required: false,
+        default: '0'
+      },
+      safeSearch: {  // Helps to filter explicit content. Either "active" or "off" allowed
+        type: String,
+        required: false,
+        default: 'off'
+      },
       colors: {
         type: Object,
         required: true
@@ -30,9 +40,6 @@ export default {
         search: '', // User search request
         apiKey: '',  // API key TODO create separate file to store API
         searchID: '',  // ID of the programmable search engine TODO create separate file to store ID
-        dateRestrict: 0, // Only shows URLs that are newer than this many days. 0 disables restriction TODO add feature
-        safeSearch: 'off', // Filters inappropriate content. Either "active" or "off" allowed TODO add feature
-        searchCount: 10,  // Number of items to be returned from a search TODO add feature
         errorMessage: '', // Holds an error message to be displayed
         searchInputPadding: 20  // Padding of the search input bar
       }
@@ -58,7 +65,13 @@ export default {
       getSearch() {
         if(this.formValidation()) {
           this.errorMessage = ''
-          fetch('https://www.googleapis.com/customsearch/v1?key=' + this.apiKey + '&cx=' + this.searchID + '&q=' + this.search)
+          fetch('https://www.googleapis.com/customsearch/v1?key=' + this.apiKey
+              + '&cx=' + this.searchID
+              + '&dateRestrict=d' + this.dateRestrict
+              + '&safe=' + this.safeSearch
+              + '&q=' + this.search
+
+          )
               .then(response => response.json())
               .then(data => (this.$emit('get-search-results', data)))
         }
@@ -67,12 +80,24 @@ export default {
       // Returns: True or False
       // Description: Ensures that all user input forms are valid
       formValidation() {
+        // Ensures search length is less than 2048 characters
         if (this.search.length > 2048) {
           this.errorMessage = 'Your search is too long'
           return false
         }
+        // Ensures the user enters something to search
         else if (this.search.length === 0) {
           this.errorMessage = 'You must enter something to search'
+          return false
+        }
+        // Ensures the safe search only has the values 'off' or 'active'
+        else if (this.safeSearch !== 'off' && this.safeSearch !== 'active') {
+          this.errorMessage = 'Invalid safe search value'
+          return false
+        }
+        // Ensures there are only numbers in the data restrict field
+        else if (this.dateRestrict.match(/^[0-9]+$/) == null) {
+          this.errorMessage = 'Invalid date restrict value'
           return false
         }
         else {

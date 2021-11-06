@@ -15,6 +15,32 @@
       >
         <div class="searchOptions">
           <h1>Search Options</h1>
+          <form>
+            <div style="text-align: center; margin-bottom: 50px;">
+              <div class="itemWithToolTip">
+                <h2 style="margin-bottom: 0.5em;">Date Restrict</h2>
+                <span class="toolTip">Only shows search results that are newer than this many days</span>
+              </div>
+              <input v-model="dateRestrict" style="width: 2.5em; text-align: center; font-size: 1em">
+              <span style="font-size: 1.2em; margin-left: 5px;">Days</span>
+            </div>
+            <div class="itemWithToolTip">
+              <h2>Safe Search</h2>
+              <span class="toolTip">Helps to remove explicit content from searches</span>
+            </div>
+            <label>
+              <input type="radio" checked="checked" name="safeSearch" @click="updateSafeSearch('off')">
+              <span class="radioButton" :style="{'background': colors.backgroundDark}"></span>
+              <span class="radioChecked"></span>
+              <span class="radioDescription">Off</span>
+            </label>
+            <label>
+              <input type="radio" name="safeSearch" @click="updateSafeSearch('active')">
+              <span class="radioButton" :style="{'background': colors.backgroundDark}"></span>
+              <span class="radioChecked"></span>
+              <span class="radioDescription">Active</span>
+            </label>
+          </form>
         </div>
         <div class="verticalLine" :style="{'background': colors.colorDark}"></div>
         <div class="colorOptions">
@@ -34,7 +60,7 @@
               <span class="radioDescription">Dark</span>
             </label>
           </form>
-          <h2>Color</h2>
+          <h2 style="margin-top: 50px;">Color</h2>
           <form>
             <label>
               <input type="radio" name="color" @click="updateSelectedColor('red')">
@@ -81,7 +107,9 @@ export default {
     return {
       colors: null,
       color: 'green',
-      theme: 'light'
+      theme: 'light',
+      dateRestrict: '0',
+      safeSearch: 'off'
     }
   },
   computed: {
@@ -96,6 +124,9 @@ export default {
     }
   },
   methods: {
+    updateSafeSearch(option) {
+      this.safeSearch = option
+    },
     updateColorTheme() {
       this.colors = new this.ColorTheme(this.theme, this.color)
       this.$emit('update-color-theme', this.colors)
@@ -108,7 +139,10 @@ export default {
       this.theme = theme
       this.updateColorTheme()
     },
-    ColorTheme(themeName, color) { // TODO improve colors each theme
+    // Input: Two strings that contain information about the theme and colors
+    // Returns: A ColorTheme object containing CSS colors to use site-wide
+    // Description: A Class function that contains CSS colors
+    ColorTheme(themeName, color) { // TODO improve colors for each theme
       if (themeName === 'dark') {
         this.fontColor = 'white'
         this.backgroundLight = 'grey'
@@ -166,9 +200,9 @@ export default {
     },
     // Input: None
     // Returns: None
-    // Description: Sends a close modal request to the parent app
+    // Description: Sends a close modal request to the parent app with search options
     closeModal() {
-      this.$emit('close-modal')
+      this.$emit('close-modal', this.dateRestrict, this.safeSearch)
     }
   },
   beforeMount() {
@@ -313,4 +347,27 @@ label input:checked ~ .radioChecked {
 .radioDescription {
   padding-left: 35px;
 }
+
+.itemWithToolTip {
+  position: relative;
+}
+
+.toolTip {
+  font-size: 16px;
+  text-align: center;
+  visibility: hidden;
+  padding: 5px 15px;
+  width: 80%;
+  position: absolute;
+  color: white;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.8);
+  top: -110%;
+  left: 7%
+}
+
+.itemWithToolTip:hover .toolTip {
+  visibility: visible;
+}
+
 </style>
