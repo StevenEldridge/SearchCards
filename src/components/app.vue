@@ -1,5 +1,5 @@
 <template>
-  <div class="app" :style="{'color': colors.fontColor}">
+  <div class="app" :style="{'color': colors.fontColor, 'background': colors.backgroundLight}">
     <button style="position: relative; top: 20px; font-size: 1.6em"
           :style="buttonColors"
           @click="openSettingsModal"
@@ -148,8 +148,8 @@ export default {
       this.fontColor = 'black'
       this.backgroundLight = 'white'
       this.backgroundDark = '#3F3F3F'
-      this.colorLight = 'lightgreen'
-      this.colorDark = 'darkgreen'
+      this.colorLight = '#80bde0'
+      this.colorDark = 'darkblue'
     }
   },
   mounted() {
@@ -164,6 +164,8 @@ export default {
 <style scoped>
   .app {
     font-family: Arial, Helvetica, sans-serif;
+    padding: 8px;
+    min-height: calc(100% - 16px);
   }
 
   .searchBar {

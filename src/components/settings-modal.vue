@@ -69,20 +69,20 @@
               <span class="radioDescription">Red</span>
             </label>
             <label>
-              <input type="radio" checked="checked" name="color" @click="updateSelectedColor('green')">
+              <input type="radio" name="color" @click="updateSelectedColor('green')">
               <span class="radioButton" style="background: green"></span>
               <span class="radioChecked"></span>
               <span class="radioDescription">Green</span>
             </label>
             <label>
-              <input type="radio" name="color" @click="updateSelectedColor('blue')">
+              <input type="radio" checked="checked" name="color" @click="updateSelectedColor('blue')">
               <span class="radioButton" style="background: blue"></span>
               <span class="radioChecked"></span>
               <span class="radioDescription">Blue</span>
             </label>
             <label>
               <input type="radio" name="color" @click="updateSelectedColor('purple')">
-              <span class="radioButton" style="background: mediumpurple"></span>
+              <span class="radioButton" style="background: #6f20ba"></span>
               <span class="radioChecked"></span>
               <span class="radioDescription">Purple</span>
             </label>
@@ -106,7 +106,7 @@ export default {
   data: function() {
     return {
       colors: null,
-      color: 'green',
+      color: 'blue',
       theme: 'light',
       dateRestrict: '0',
       safeSearch: 'off'
@@ -145,28 +145,41 @@ export default {
     ColorTheme(themeName, color) { // TODO improve colors for each theme
       if (themeName === 'dark') {
         this.fontColor = 'white'
-        this.backgroundLight = 'grey'
-        this.backgroundDark = '#404040'
         switch (color) {
           case 'red':
-            this.colorLight = 'lightcoral'
-            this.colorDark = 'darkred'
+            this.colorLight = '#241313'
+            this.colorDark = '#241313'
+            this.backgroundLight = '#424345'
+            this.backgroundDark = 'lightcoral'
+            this.searchCardBackground = '#362c2c'
             break
           case 'green':
-            this.colorLight = 'lightgreen'
-            this.colorDark = 'darkgreen'
+            this.colorLight = '#131c16'
+            this.colorDark = '#131c16'
+            this.backgroundLight = '#424345'
+            this.backgroundDark = 'lightgreen'
+            this.searchCardBackground = '#2c3630'
             break
           case 'blue':
-            this.colorLight = 'lightblue'
-            this.colorDark = 'darkblue'
+            this.colorLight = '#11161f'
+            this.colorDark = '#11161f'
+            this.backgroundLight = '#424345'
+            this.backgroundDark = '#80bde0'
+            this.searchCardBackground = '#2b2d36'
             break
           case 'purple':
-            this.colorLight = 'mediumpurple'
-            this.colorDark = 'purple'
+            this.colorLight = '#151021'
+            this.colorDark = '#151021'
+            this.backgroundLight = '#424345'
+            this.backgroundDark = '#b8a0eb'
+            this.searchCardBackground = '#2b2636'
             break
           default:
-            this.colorLight = 'lightgreen'
-            this.colorDark = 'darkgreen'
+            this.colorLight = '#11161f'
+            this.colorDark = '#11161f'
+            this.backgroundLight = '#424345'
+            this.backgroundDark = '#80bde0'
+            this.searchCardBackground = '#2b2d36'
             break
         }
       }
@@ -174,6 +187,7 @@ export default {
         this.fontColor = 'black'
         this.backgroundLight = 'white'
         this.backgroundDark = '#3F3F3F'
+        this.searchCardBackground = 'white'
         switch (color) {
           case 'red':
             this.colorLight = 'lightcoral'
@@ -184,16 +198,16 @@ export default {
             this.colorDark = 'darkgreen'
             break
           case 'blue':
-            this.colorLight = 'lightblue'
+            this.colorLight = '#80bde0'
             this.colorDark = 'darkblue'
             break
           case 'purple':
-            this.colorLight = 'mediumpurple'
-            this.colorDark = 'purple'
+            this.colorLight = '#b8a0eb'
+            this.colorDark = '#480885'
             break
           default:
-            this.colorLight = 'lightgreen'
-            this.colorDark = 'darkgreen'
+            this.colorLight = '#80bde0'
+            this.colorDark = 'darkblue'
             break
         }
       }
@@ -206,7 +220,16 @@ export default {
     }
   },
   beforeMount() {
-    this.updateColorTheme('light', 'green')
+    // Sets default loading theme to dark if the user's browser is set to a dark theme
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      this.theme = 'dark'
+      this.color = 'blue'
+    }
+    else {
+      this.theme = 'light'
+      this.color = 'blue'
+    }
+    this.updateColorTheme()
   }
 }
 </script>

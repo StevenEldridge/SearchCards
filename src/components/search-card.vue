@@ -1,5 +1,8 @@
 <template>
-  <div class="searchCard" :style="{width: widthPercent, 'border-color': colors.colorDark}" @click="openModal">
+  <div class="searchCard" :style="{width: widthPercent,
+        'border-color': colors.colorDark,
+        'background': colors.searchCardBackground}"
+        @click="openModal">
     <div class="title" :style="{'background': colors.colorLight}">
       <h2>{{ title }}</h2>
     </div>
