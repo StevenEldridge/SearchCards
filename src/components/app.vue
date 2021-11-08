@@ -21,22 +21,24 @@
              :link="item.link"
              :displayLink="item.displayLink"
              :description="item.snippet"
-             :imageURL="proccessImageURL(item)"
+             :imageURL="processImageURL(item)"
              :colors="colors"
              :windowWidth="windowWidth"
       ></search-card>
     </div>
     <search-card-modal class="modal"
-           v-show="showCardModal"
+           v-if="showCardModal"
            :title="modalTitle"
            :link="modalLink"
            :window-height="windowHeight"
+           :window-width="windowWidth"
            :colors="colors"
            @close-modal="closeCardModal"
     ></search-card-modal>
     <settings-modal class="modal"
            v-show="showSettingsModal"
            :window-height="windowHeight"
+           :window-width="windowWidth"
            @close-modal="closeSettingsModal"
            @update-color-theme="updateColorTheme"
     ></settings-modal>
@@ -106,14 +108,14 @@ export default {
       this.safeSearch = safeSearch
       this.showSettingsModal = false
     },
+    updateColorTheme(colors) {
+      this.colors = colors
+    },
     // Input: An object of the google search results
     // Returns: Either null or a URL String
     // Description: Checks to ensure there is a URL present and catches uninitialized
     //              variables that results if there is no image url given
-    updateColorTheme(colors) {
-      this.colors = colors
-    },
-    proccessImageURL(item) {
+    processImageURL(item) {
       try {
         if (item.pagemap.cse_image[0].src !== undefined) {
           return item.pagemap.cse_image[0].src

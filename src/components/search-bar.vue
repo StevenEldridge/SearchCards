@@ -6,7 +6,10 @@
             width: searchInputWidth.toString() + 'px',
             'padding-left': searchInputPadding.toString() + 'px',
             'padding-right': searchInputPadding.toString() + 'px'}">
-      <button class="buttons" :style="buttonColors" @click="getSearch()">Search</button>
+      <button class="buttons" v-if="windowWidth > 770" :style="buttonColors" @click="getSearch()">Search</button>
+    </div>
+    <div v-if="windowWidth <= 770" style="text-align: center; width: 100%; margin-top: 20px;">
+      <button class="buttons" :style="buttonColors" style="font-size: 2em" @click="getSearch()">Search</button>
     </div>
   </div>
 </template>

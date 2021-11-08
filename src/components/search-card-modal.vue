@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="modalContent" :style="{'margin-top': modalMarginHeight + 'px', 'border-color': colors.colorDark}">
-      <div class="modalHeading" :style="{'background': colors.colorLight}">
+      <div class="modalHeading" v-if="windowWidth > 770" :style="{'background': colors.colorLight}">
         <div class="headingLeft">
           <h2>{{ title }}</h2>
           <h4>{{ link }}</h4>
@@ -11,7 +11,18 @@
           <button @click="openLink" :style="buttonColors">Open Link</button>
         </div>
       </div>
-      <iframe :src="link" :title="title"></iframe>
+      <div class="modalHeadingMobile" v-if="windowWidth <= 770" :style="{'background': colors.colorLight}">
+        <div style="font-size: 0.65em">
+          <h2 class="headingTextMobile">{{ title }}</h2>
+          <h4 class="headingTextMobile" style="font-size: 0.9em;">{{ link }}</h4>
+        </div>
+        <div style="display: flex; justify-content: space-evenly; width: 100%;">
+          <button @click="closeModal" class="buttonMobile" :style="buttonColors">Close</button>
+          <button @click="openLink" class="buttonMobile" :style="buttonColors">Open Link</button>
+        </div>
+      </div>
+      <iframe v-if="windowWidth > 770" style="height: calc(100% - 7.2em);" :src="link" :title="title"></iframe>
+      <iframe v-else style="height: calc(100% - 10.63em); overflow: hidden" :src="link" :title="title"></iframe>
     </div>
   </div>
 </template>
@@ -32,6 +43,11 @@ export default {
       type: Number,
       required: false,
       default: window.innerHeight
+    },
+    windowWidth: {
+      type: Number,
+      required: false,
+      default: window.innerWidth
     },
     colors: {
       type: Object,
@@ -86,6 +102,14 @@ export default {
     height: 5em;
   }
 
+  .modalHeadingMobile {
+    font-size: 1.5em;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    padding: 1px 15px;
+    height: 7em;
+  }
+
   .headingLeft {
     float: left;
     text-align: center;
@@ -101,6 +125,18 @@ export default {
     text-align: center;
     height: 100%;
     width: 6em;
+  }
+
+  .headingTextMobile {
+    height: 2.4em;
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+
+  .buttonMobile {
+    margin-top: 5px;
+    font-size: 0.9em;
   }
 
   button {
@@ -125,7 +161,6 @@ export default {
   iframe {
     border: none;
     width: 100%;
-    height: calc(100% - 7.2em);
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
   }

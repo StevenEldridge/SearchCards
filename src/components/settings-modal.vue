@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="modalContent" :style="{'margin-top': (0.05 * windowHeight) + 'px', 'border-color': colors.colorDark, 'background': colors.backgroundLight}">
-      <div class="modalHeading" :style="{'background': colors.colorLight}">
+      <div v-if="windowWidth > 770" class="modalHeading" :style="{'background': colors.colorLight}">
         <div class="headingLeft">
           <h1 style="margin-bottom: 0">Settings</h1>
         </div>
@@ -9,14 +9,22 @@
           <button @click="closeModal" :style="buttonColors">Close</button>
         </div>
       </div>
+      <div v-if="windowWidth <= 770" class="modalHeadingMobile" :style="{'background': colors.colorLight}">
+        <h1 style="margin: 0; display: inline;">Settings</h1>
+        <button @click="closeModal" style="margin: 0; font-size: 1.3em; height: 2em;" :style="buttonColors">Close</button>
+      </div>
       <div class="modalBody" :style="{
-              'margin-top': (0.05 * modalContentHeight) + 'px',
-              'height': 'calc(' + (0.95 * modalContentHeight) + 'px - 7.1em)'}"
+              'margin-top': modalBodyMarginHeight,
+              'height': modalBodyHeight,
+              'display': modalBodyDisplay,
+              'font-size': modalBodyFontSize}"
       >
-        <div class="searchOptions">
+        <div class="searchOptions" :style="{width: modalContentWidth,
+              height: modalBodyChildHeight,
+              'margin-top': modalBodyChildPaddingTop}">
           <h1>Search Options</h1>
           <form>
-            <div style="text-align: center; margin-bottom: 50px;">
+            <div style="text-align: center; margin-bottom: 2.3em;">
               <div class="itemWithToolTip">
                 <h2 style="margin-bottom: 0.5em;">Date Restrict</h2>
                 <span class="toolTip">Only shows search results that are newer than this many days</span>
@@ -42,8 +50,10 @@
             </label>
           </form>
         </div>
-        <div class="verticalLine" :style="{'background': colors.colorDark}"></div>
-        <div class="colorOptions">
+        <div v-if="windowWidth > 770" class="verticalLine" :style="{'background': colors.colorDark}"></div>
+        <div class="colorOptions" :style="{width: modalContentWidth,
+              height: modalBodyChildHeight,
+              'padding-top': modalBodyChildPaddingTop}">
           <h1>Color Options</h1>
           <h2>Light or Dark</h2>
           <form>
@@ -60,7 +70,7 @@
               <span class="radioDescription">Dark</span>
             </label>
           </form>
-          <h2 style="margin-top: 50px;">Color</h2>
+          <h2 style="margin-top: 2em;">Color</h2>
           <form>
             <label>
               <input type="radio" name="color" @click="updateSelectedColor('red')">
@@ -76,7 +86,7 @@
             </label>
             <label>
               <input type="radio" checked="checked" name="color" @click="updateSelectedColor('blue')">
-              <span class="radioButton" style="background: blue"></span>
+              <span class="radioButton" style="background: blue; float: left"></span>
               <span class="radioChecked"></span>
               <span class="radioDescription">Blue</span>
             </label>
@@ -101,6 +111,11 @@ export default {
       type: Number,
       required: false,
       default: window.innerHeight
+    },
+    windowWidth: {
+      type: Number,
+      required: false,
+      default: window.innerWidth
     }
   },
   data: function() {
@@ -115,6 +130,62 @@ export default {
   computed: {
     modalContentHeight() {
       return this.windowHeight * 0.9
+    },
+    modalBodyMarginHeight() {
+      if (this.windowWidth > 770) {
+        return (0.05 * this.modalContentHeight) + 'px'
+      }
+      else {
+        return '0'
+      }
+    },
+    modalBodyChildPaddingTop() {
+      if (this.windowWidth > 770) {
+        return '1.8em'
+      }
+      else {
+        return '0'
+      }
+    },
+    modalBodyFontSize() {
+      if (this.windowWidth > 770) {
+        return '1em'
+      }
+      else {
+        return '0.8em'
+      }
+    },
+    modalBodyDisplay() {
+      if (this.windowWidth > 770) {
+        return 'flex'
+      }
+      else {
+        return 'block'
+      }
+    },
+    modalBodyHeight() {
+      if (this.windowWidth > 770) {
+        return 'calc(' + (0.95 * this.modalContentHeight) + 'px - 7.1em)'
+      }
+      else {
+        return 'calc(' + this.modalContentHeight + 'px - 5em)'
+      }
+    },
+    modalBodyChildHeight() {
+      if (this.windowWidth > 770) {
+        return '100%'
+      }
+      else {
+        return 'auto'
+      }
+    },
+    modalContentWidth() {
+      if (this.windowWidth > 770) {
+        return 'calc(50% - 4px)'
+      }
+      else {
+        return '100%'
+      }
     },
     buttonColors() {
       return {
@@ -142,7 +213,7 @@ export default {
     // Input: Two strings that contain information about the theme and colors
     // Returns: A ColorTheme object containing CSS colors to use site-wide
     // Description: A Class function that contains CSS colors
-    ColorTheme(themeName, color) { // TODO improve colors for each theme
+    ColorTheme(themeName, color) {
       if (themeName === 'dark') {
         this.fontColor = 'white'
         switch (color) {
@@ -257,6 +328,27 @@ export default {
   overflow: hidden;
 }
 
+.modalHeadingMobile {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 1em;
+  margin-bottom: 0;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  padding: 1px 15px;
+  height: 5em;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.modalBody {
+  width: 100%;
+  border-bottom-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  overflow: hidden;
+}
+
 .headingLeft {
   float: left;
   text-align: center;
@@ -276,21 +368,11 @@ export default {
   width: 6.5em;
 }
 
-.modalBody {
-  display: flex;
-  width:100%;
-}
-
 .searchOptions {
-  padding-top: 30px;
-  height: 100%;
-  width: calc(50% - 4px);
 }
 
 .colorOptions {
-  padding-top: 30px;
-  height: 100%;
-  width: calc(50% - 4px);
+  padding-top: 1.8em;
 }
 
 .verticalLine {
@@ -336,7 +418,7 @@ iframe {
 label {
   display: block;
   font-size: 1.3em;
-  margin-bottom: 20px;
+  margin-bottom: 0.5em;
   cursor: pointer;
   padding-left: 40%;
 }
@@ -346,20 +428,20 @@ label input {
 }
 
 .radioButton {
-  position: absolute;
-  height: 25px;
-  width: 25px;
+  position: fixed;
+  height: 1.2em;
+  width: 1.2em;
   border-radius: 50%;
 }
 
 .radioChecked {
-  position: absolute;
   background: white;
+  position: fixed;
   display: none;
-  height: 13px;
-  width: 13px;
-  margin-left: 6px;
-  margin-top: 6px;
+  height: 0.6em;
+  width: 0.6em;
+  margin-left: 0.32em;
+  margin-top: 0.32em;
   border-radius: 50%;
 }
 
