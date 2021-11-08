@@ -41,8 +41,8 @@ export default {
     data: function() {
       return {
         search: '', // User search request
-        apiKey: '',  // API key TODO create separate file to store API
-        searchID: '',  // ID of the programmable search engine TODO create separate file to store ID
+        apiKey: process.env.VUE_APP_GOOGLE_API_KEY,  // API key
+        searchID: process.env.VUE_APP_GOOGLE_CX,  // ID of the programmable search engine
         errorMessage: '', // Holds an error message to be displayed
         searchInputPadding: 20  // Padding of the search input bar
       }
@@ -77,6 +77,8 @@ export default {
           )
               .then(response => response.json())
               .then(data => (this.$emit('get-search-results', data)))
+
+          this.search = ''  // Clears form upon submitting a search request
         }
       },
       // Input: None
