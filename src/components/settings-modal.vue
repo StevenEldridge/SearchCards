@@ -58,13 +58,13 @@
           <h2>Light or Dark</h2>
           <form>
             <label>
-              <input type="radio" checked="checked" name="LightDark" @click="updateSelectedTheme('light')">
+              <input :checked="!darkChecked" type="radio" name="LightDark" @click="updateSelectedTheme('light')">
               <span class="radioButton" :style="{'background': colors.backgroundDark}"></span>
               <span class="radioChecked"></span>
               <span class="radioDescription">Light</span>
             </label>
             <label>
-              <input type="radio" name="LightDark" @click="updateSelectedTheme('dark')">
+              <input :checked="darkChecked" type="radio" name="LightDark" @click="updateSelectedTheme('dark')">
               <span class="radioButton" :style="{'background': colors.backgroundDark}"></span>
               <span class="radioChecked"></span>
               <span class="radioDescription">Dark</span>
@@ -192,6 +192,14 @@ export default {
         '--background': this.colors.backgroundDark,
         '--backgroundHover': this.colors.colorDark,
       }
+    },
+    darkChecked() {
+      if (this.theme === 'dark') {
+        return true
+      }
+      else {
+        return false
+      }
     }
   },
   methods: {
@@ -301,7 +309,8 @@ export default {
       this.color = 'blue'
     }
     this.updateColorTheme()
-  }
+  },
+
 }
 </script>
 
